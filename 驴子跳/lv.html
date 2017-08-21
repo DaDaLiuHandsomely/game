@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		div{
+			width: 480px;
+			height: 800px;
+			overflow: hidden;
+			position: relative;
+			margin: 0 auto;
+			border: 1px solid #000;
+		}
+		canvas{
+			background: #0099FF;
+		}
+	</style>
+	<body>
+		<div>
+			<canvas id="" width="480" height="800"></canvas>
+			
+		</div>
+		
+	</body>
+</html>
+<script src="js/lazyLoad.js"></script>
+<script src="js/touch.js"></script>
+<script>
+	var can = document.querySelector('canvas');
+	var pen = can.getContext('2d');
+	var arr = ['cloud1.png','jump1.png','jump2.png','cloud2.png','cloud3.png']
+	lazyLoad(arr,function(data){	
+		var cloud = [];	
+		var cl = [data.cloud1,data.cloud2,data.cloud3];
+		
+//			pen.drawImage(data.cloud1,Math.round(Math.random()*330+5),0,153,57);
+//			pen.drawImage(data.cloud1,Math.round(Math.random()*330+5),0+250,153,57);
+//			pen.drawImage(data.cloud1,Math.round(Math.random()*330+5),0+500,153,57);
+//			pen.drawImage(data.cloud1,Math.round(Math.random()*330+5),0+750,153,57);		
+		setInterval(function(){
+			var cnum = Math.round(Math.random()*2);
+			cloud.push({
+				c:cl[cnum],
+				ci:0,
+				x:Math.round(Math.random()*330+5),
+				ys:100,
+				s:0
+			})
+		},1000/4)
+		var nstatus = 0;
+		setInterval(function(){
+			pen.clearRect(0,0,480,800)
+			for(var i=0;i<cloud.length;i++){
+				
+				pen.drawImage(cloud[i].c,0,0,256*cloud[i].ci,128,cloud[i].x,cloud[i].ys-i*250,153,57);
+				cloud[i].ys+=cloud[i].s;
+//				if(nstatus==1){				
+//					if(cloud1[i].ys>=200){
+//						cloud1[i].ys=200;
+//						nstatus==0;
+//					}
+//					
+//				}
+				
+				
+				
+//				if(cloud1[i].ys-i*150>=700){
+//					cloud1.splice(i,1,'');
+//					
+//				}
+			}
+			
+			
+			
+			lv.y-=lv.v;
+			lv.lvi++;
+			if(lv.y<=250){
+				lv.y=250;
+				for(var n=0;n<cloud.length;n++){
+					cloud[n].s=8;
+				}
+				setTimeout(function(){
+					for(var o=0;o<cloud.length;o++){
+					cloud[o].s=0;
+				}
+				},5000);
+			}
+			pen.drawImage(data.jump1,lv.lvi*128,0,128,128,lv.x,lv.y,128,128)
+			if(lv.lvi==18){
+				lv.lvi=0
+			}
+			
+			
+			
+			for(var k=0;k<cloud.length;k++){
+				if(touch(lv.x,lv.y,128,128,cloud[k].x,cloud[k].ys-k*150,53,57)){
+					lv.v=15;
+					lv.v-=lv.g;
+					lv.y-=lv.v;
+					lv.lvi++;
+					pen.drawImage(data.jump1,lv.lvi*128,0,128,128,lv.x,lv.y,128,128)
+					if(lv.lvi==18){
+						lv.lvi=0
+					}
+					for(var m=0;m<cloud.length;m++){
+						if(cloud[m].c==cl[2]){
+							cloud[m].ci++;
+						}
+						if(cloud[m].ci==6){
+							cloud[m].ci=0;
+						}
+						cloud[m].s=10;
+					}
+					setTimeout(function(){
+						for(var n=0;n<cloud.length;n++){
+							cloud[n].s=0;
+						}
+					},1000);
+				}
+
+				
+			}
+		},1000/24);
+		
+		
+		
+		
+		
+		var lv = {
+			x:190,
+			y:650,
+			g:1,
+			v:30,
+			xv:10,
+			lvi:0
+		}
+		window.onkeydown = function(e){
+			switch(e.keyCode){
+				case 37:
+				lv.x-=lv.xv;
+				break;
+				case 39:
+				lv.x+=lv.xv;
+				break;
+			}
+		}
+	})
+</script>

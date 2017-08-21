@@ -1,0 +1,40 @@
+div{
+	width: 480px;
+	height: 800px;
+	overflow: hidden;
+	position: relative;
+	margin: 0 auto;
+	border: 1px solid #000;
+}
+canvas{
+	background: url(../images/background.jpg);
+}
+#btn{
+	position: absolute;
+	left: 160px;
+	top: 580px;
+}
+#sky{
+	position: absolute;
+	left: 0;
+	top: -2272px;
+	z-index: -4;
+}
+#hill{
+	position: absolute;
+	left: 0;
+	top: 198px;
+	z-index: -3;
+}
+#hillnear{
+	position: absolute;
+	left: 0;
+	top: 187px;
+	z-index: -2;
+}
+#floor{
+	position: absolute;
+	left: 0;
+	top: 216px;
+	z-index: -1;
+}
