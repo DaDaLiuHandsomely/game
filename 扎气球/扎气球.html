@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			body{
+				cursor: url("G:\大前端培训\日期\0814\zhen.ico"),auto;
+			}
+			h1{
+				font-size: 120px;
+				font-weight: 500;
+				position: fixed;
+				left: 320px;
+				top: 220px;
+				color: #000;
+				z-index: 1;
+			}
+			canvas{
+				background: url(bg.jpg);
+				float:left;
+			}
+			div{
+				float: left;
+			}
+			span{
+				display: block;
+			}
+			h2,h3{
+				display: inline-block;
+			}
+			.over{
+				display: none;
+				width: 1320px;
+				height: 800px;
+				background: #C1C2C3;
+				opacity: 0.5;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="" width="1320" height="800"></canvas>
+		<div>
+			<p>&nbsp;</p>
+			<hr />
+			<div>击中：</div><span>0</span>
+			<hr />
+			<div>剩余时间：</div><font>60</font>	
+			<hr />
+			<h3>得分：</h3><h2></h2>
+			<hr />
+			<h4></h4>
+			<h1></h1>
+		</div>
+		<div class="over"></div>
+	</body>
+</html>
+<script src="lazyLoad.js"></script>
+<script src="touch.js"></script>
+<script>
+	var a = 60;
+	var can = document.querySelector('canvas');
+	var pen = can.getContext('2d');
+	var span = document.querySelector('span');
+	var p = document.querySelector('p');
+	var font = document.querySelector('font');
+	var h = document.querySelector('h1');
+	var h2 = document.querySelector('h2');
+	var over = document.querySelector('.over');
+	var qq = ['bo.png'];
+	
+	var balloon = [];
+
+	var x = 0;
+	var numb = 0;
+	window.onmousedown = function(e){
+		for(var k = 0;k<balloon.length;k++){
+			if(touch(e.pageX,e.pageY,0,0,balloon[k].x,balloon[k].y,118,184)){
+				balloon.splice(k,1);
+				x++;
+				span.innerHTML = x;
+				if(balloon[k].bi==0){
+					numb+=5;
+				}
+				if(balloon[k].bi==1){
+					numb+=10;
+				}
+				if(balloon[k].bi==2){
+					numb+=1;
+				}
+				if(balloon[k].bi==3){
+					numb+=-2;
+				}
+				h2.innerHTML = numb;
+			}	
+		}
+	}
+	lazyLoad(qq,function(data){
+		
+		var s1 = setInterval(function(){
+			
+			pen.clearRect(0,0,1320,800)
+			for(var i = 0;i<balloon.length;i++){
+				pen.drawImage(data.bo,118*balloon[i].bi,0,118,184,balloon[i].x, balloon[i].y-=balloon[i].s, 118,184);				
+				if(balloon[i].y==-370){
+					balloon.splice(i,1);
+				}
+				if(balloon[i].bi==0){				
+					balloon[i].s=4;
+				}
+				if(balloon[i].bi==1){				
+					balloon[i].s=8;
+				}
+				if(balloon[i].bi==3){				
+					balloon[i].s=6;
+				}
+				
+			}
+		},1000/60);	
+		
+		var s2 = setInterval(function(){
+		
+			balloon.push({
+				x:Math.round(Math.random()*1240),
+				y:800,
+				s:2,
+				bi:Math.round(Math.random()*3)
+			});
+			
+		},1000);
+		
+		setInterval(function(){
+			var date = new Date();
+			var h = date.getHours().toString();
+			var m = date.getMinutes().toString();
+			var s = date.getSeconds().toString();
+			if(h.length==1){
+				h = '0'+h;
+			}
+			if(m.length==1){
+				m = '0'+m;
+			}
+			if(s.length==1){
+				s = '0'+s;
+			}
+			var time = h+':'+m+':'+s;
+			var timeArry = time.split('');
+			p.innerHTML = time;
+		},1000)
+		
+		setInterval(function(){
+			if(a>0){
+				a--;
+				font.innerHTML = a;
+			}else{
+				font.innerHTML = 0;
+				clearInterval(s1);
+				clearInterval(s2);
+				h.innerHTML = 'game over';
+				over.style.display = 'block';
+			}	
+		},1000)
+	});
+</script>

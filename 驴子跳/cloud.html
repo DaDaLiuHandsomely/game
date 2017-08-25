@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		div{
+			width: 480px;
+			height: 800px;
+			overflow: hidden;
+			position: relative;
+			margin: 0 auto;
+			border: 1px solid #000;
+		}
+		canvas{
+			background: #0099FF;
+		}
+	</style>
+	<body>
+		<div>
+			<canvas id="" width="480" height="800"></canvas>
+			
+		</div>
+		
+	</body>
+</html>
+<script src="js/lazyLoad.js"></script>
+<script src="js/touch.js"></script>
+<script>
+	var can = document.querySelector('canvas');
+	var pen = can.getContext('2d');
+	var arr = ['cloud1.png','jump1.png','jump2.png','cloud2.png','cloud3.png']
+	lazyLoad(arr,function(data){	
+		var cloud = [];
+		var cy = 0;
+		var cv = 4;
+		
+		
+		var ci = 0;
+		var co = 0;
+		
+		
+		set = setInterval(function(){
+			pen.clearRect(20,300,256,128);
+			pen.drawImage(data.cloud2,256*ci,0,256,128,20,300,256,128);
+			ci++;
+			if(ci==6){
+				ci = 0;
+				clearInterval(set);
+			}
+		},1000/6);
+		setInterval(function(){
+			pen.clearRect(0,0,480,800)
+			var clo = [pen.drawImage(data.cloud1,0,0,256,128,20,cy+cv,256,128),
+		pen.drawImage(data.cloud2,256*ci,0,256,128,90,cy+cv,256,128),
+		pen.drawImage(data.cloud3,256*co,0,256,128,50,cy+cv,256,128)];	
+		
+			cy +=230;
+			var cl = Math.round(Math.random()*2);
+			cloud.push(clo[cl])
+			console.log(cv);
+		},1000);
+		
+	})
+</script>

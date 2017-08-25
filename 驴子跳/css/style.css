@@ -38,3 +38,12 @@ canvas{
 	top: 216px;
 	z-index: -1;
 }
+span{
+	
+	position: absolute;
+	left: 120px;
+	top: 495px;
+	z-index: 1;
+	color: #fff;
+	font-size: 30px;
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		
+		html, body{
+			height: 100%;
+		}
+		
+		canvas{
+			background: url("bg.jpg");
+		}
+	</style>
+</head>
+<body>
+	<canvas width="800" height="480"></canvas>
+</body>
+</html>
+<script src="public.js"></script>
+<script>
+var can = document.querySelector('canvas');
+var pen = can.getContext('2d');	
+var arr = ['fish.png', 'cannon.png', 'bullet.png'];	
+	
+var fishs = [];	
+	
+setInterval(function(){
+	fishs.push({
+		x: -172,
+		y: Math.random()*300,
+		s: 2,
+		i: 0,
+		r: (Math.ceil(Math.random()*40 - 20))*Math.PI/180
+	})
+}, 2000)
+	
+var cannon = {
+	y: 400,
+	x: 300,
+	s: 10
+}	
+
+var bullet = [];
+	
+lazyLoad(arr, function(data){
+	setInterval(function(){
+		pen.clearRect(0, 0, 800, 600);
+		for(var j = 0; j < fishs.length; j ++){
+			if(fishs[j].x > 800){
+				fishs.splice(j, 1);
+			}			
+			fishs[j].i++;
+			if(fishs[j].i == 8){
+				fishs[j].i = 0;
+			}
+			pen.rotate(fishs[j].r);
+			pen.drawImage(data.fish, 0, fishs[j].i*126, 174, 126, fishs[j].x += fishs[j].s, fishs[j].y, 174, 126);	
+			pen.rotate(-fishs[j].r);
+		}	
+		
+		for(var k = 0; k < bullet.length; k++){
+			pen.drawImage(data.bullet, bullet[k].x, bullet[k].y -= bullet[k].s, 24, 26);
+			for(var l = 0; l < fishs.length; l++){
+				if(touch(bullet[k].x, bullet[k].y, 24, 26, fishs[l].x, fishs[l].y, 174, 80)){
+					bullet.splice(k, 1);
+					fishs.splice(l, 1);
+				}
+			}
+		}		
+		
+		pen.drawImage(data.cannon, cannon.x, cannon.y, 74, 68);
+	}, 1000/24);
+
+	
+	window.onkeydown = function(e){
+		switch(e.keyCode){
+			case 37:
+				cannon.x -= cannon.s;
+			break;	
+				
+			case 39:
+				cannon.x += cannon.s;
+			break;
+				
+			case 32:
+				bullet.push({
+					x: cannon.x + 26,
+					y: cannon.y + 5,
+					s: 5
+				});
+			break;	
+		}
+	}
+});
+</script>

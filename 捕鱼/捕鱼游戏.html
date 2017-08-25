@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			html,body{
+				height: 100%;
+			}
+			canvas{
+				background: url(bg.jpg);
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="" width="1024" height="768"></canvas>
+	</body>
+</html>
+<script src="lazyload.js"></script>
+<script src="touch.js"></script>
+<script>
+	var can = document.querySelector('canvas');
+	var pen = can.getContext('2d');
+	var arr = ['fish.png','cannon.png','bullet.png']
+	var fish = [];
+	var cannon = {
+		x:450,
+		y:700,
+		s:4
+	}
+	var bullet = [];
+	lazyload(arr,function fun(date){
+		
+		setInterval(function(){	
+			pen.clearRect(0,0,1024,768)
+			for(var j = 0;j<fish.length;j++){
+				
+				pen.drawImage(date.fish,0,fish[j].i*126,174,126,fish[j].x+=fish[j].s,fish[j].y,174,126);
+				
+				fish[j].i++;
+				if(fish[j].i==8){
+					fish[j].i=0;
+				}
+				if(fish[j].x>=1200){
+					fish.splice(j,1);
+				}
+			}
+			for(var k = 0;k<bullet.length;k++){
+				pen.drawImage(date.bullet,bullet[k].x_,bullet[k].y-=bullet[k].s,24,26);		
+				for(var z = 0;z<fish.length;z++){
+					if(touch(bullet[k].x_,bullet[k].y,24,26,fish[z].x,fish[z].y,100,86)){
+						bullet.splice(k,1);
+						fish.splice(z,1);
+						console.log(2);	
+					}else if(bullet[k].y<=-50){
+						bullet.splice(k,1);
+						console.log(3);	
+					}
+				}				
+			}			
+			
+			
+			pen.drawImage(date.cannon,cannon.x,cannon.y,74,68);
+			
+		},1000/24);
+		setInterval(function(){
+			fish.push({
+				x:-174,
+				y:Math.round(Math.random()*768),
+				s:4,
+				i:0
+				
+			});
+		},1000);
+		
+		
+		setInterval(function(){
+		
+			
+		},1000/24)
+		window.onkeydown = function(e){
+			switch(e.keyCode){
+				case 37:
+					cannon.x-=cannon.s;
+					console.log(1);
+				break;
+				case 39:
+					cannon.x+=cannon.s;
+					console.log(1);
+				break;
+				case 32:
+					bullet.push({
+						x_:cannon.x+25,
+						y:702,
+						s:4
+					});
+					console.log(1);
+				break;
+			}
+			
+		}
+	});
+	
+</script>

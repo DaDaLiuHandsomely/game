@@ -54,7 +54,7 @@
 			pen.clearRect(0,0,480,800)
 			for(var i=0;i<cloud.length;i++){
 				
-				pen.drawImage(cloud[i].c,0,0,256*cloud[i].ci,128,cloud[i].x,cloud[i].ys-i*250,153,57);
+				pen.drawImage(cloud[i].c,0,0,256,128,cloud[i].x,cloud[i].ys-i*250,153,57);
 				cloud[i].ys+=cloud[i].s;
 //				if(nstatus==1){				
 //					if(cloud1[i].ys>=200){
@@ -63,8 +63,7 @@
 //					}
 //					
 //				}
-				
-				
+					
 				
 //				if(cloud1[i].ys-i*150>=700){
 //					cloud1.splice(i,1,'');
@@ -104,15 +103,7 @@
 					if(lv.lvi==18){
 						lv.lvi=0
 					}
-					for(var m=0;m<cloud.length;m++){
-						if(cloud[m].c==cl[2]){
-							cloud[m].ci++;
-						}
-						if(cloud[m].ci==6){
-							cloud[m].ci=0;
-						}
-						cloud[m].s=10;
-					}
+					
 					setTimeout(function(){
 						for(var n=0;n<cloud.length;n++){
 							cloud[n].s=0;
